@@ -61,13 +61,16 @@ while True:
                 claveCliente = int(input("Ingresa la clave del cliente: "))
                 if claveCliente not in contactos:
                     print("Cliente no encontrado.")
+                    respuesta = input("Deseas cancelar la operacion? presiona [s] para si o cualquier otra tecla para no: " ).lower()
+                    if respuesta == "s":
+                        break  # Salir al menú principal para registrar un nuevo cliente
                     continue
                 print("Selecciona la sala para tu reservacion:")
                 print("CLAVE\tNOMBRE\tCUPO")
                 for codigo, (salaNombre, cupo) in salasActivas.items():
                     print(f"{codigo}. \t{salaNombre} \t(Cupo: {cupo})")
                 
-                codigoSala = input("Ingresa el codigo de la sala: ")
+                codigoSala = input("Ingresa la clave de la sala: ")
                 if codigoSala not in salasActivas:
                     print("Sala no encontrada.")
                     continue
@@ -158,21 +161,21 @@ while True:
         if not reservas_filtradas:
             print("No hay reservaciones para esta fecha.")
         else:
-            print("\n REPORTE DE RESERVACIONES PARA EL DÍA", fecha_str, "")
-            print("**")
-            print("SALA\tCLIENTE\t\tEVENTO\t\t\t\t\t\t\t\tTURNO")
-            print("**")
+            print("*"*95)
+            print("**" "\t\tREPORTE DE RESERVACIONES PARA EL DÍA", fecha_str,  "\t\t**""")
+            print("**SALA\t\tCLIENTE\t\t\tEVENTO\t\t\t\tTURNO**")
+            print("*"*95)
 
             for reservacion_id, claveCliente, codigoSala, fecha, hora, NombreReservacion in reservas_filtradas:
                 cliente = contactos.get(claveCliente, "Cliente no encontrado.")
                 sala = salasActivas.get(codigoSala, "Sala no encontrada.")
-                evento = f"Evento de {cliente[0]}"  # O algún evento específico si se quiere agregar
+                evento = f"{NombreReservacion}"  
                 turno = "Matutino" if hora == datetime.time(9, 0) else "Vespertino" if hora == datetime.time(15, 0) else "Nocturno"
 
-                print(f"{codigoSala}\t{cliente[0]}, {cliente[1]}\t{evento}\t{turno}\t{NombreReservacion}")
+                print(f"{codigoSala}\t\t{cliente[0]} {cliente[1]}\t\t{evento}\t\t\t\t{turno}")
 
-            print("**")
-            print("FIN DEL REPORTE")
+            print(("*" * 40) + "FIN DEL REPORTE" + ("*" * 40))
+
             break
 
     elif opcion == "6":
@@ -180,5 +183,3 @@ while True:
         break
     else:
         print("Opcion no valida, intenta de nuevo")
-
-
