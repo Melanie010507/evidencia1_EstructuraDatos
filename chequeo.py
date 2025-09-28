@@ -7,10 +7,6 @@ claveSala = 1
 reservaciones = dict()
 numeroFolio = 1
 
-def ordenador(item):
-    clave, (apellido, nombre) = item
-    return (apellido, nombre)
-
 while True:
     print("\n---Menu de opciones---")
     print("1. Registrar contacto")
@@ -59,16 +55,17 @@ while True:
         while True: #Aqui agregamos un bucle para que pueda ver las opciones y si pone una incorrecta no se vaya al menu principal
             print("Seleccion cliente para tu reservacion:")
             print("CLAVE\tNOMBRE\tAPELLIDO")
-            for clave, (apellido, nombre) in sorted(contactos.items(), key=ordenador):
-                print(f"{clave}. \t{apellido}, \t{nombre}")
+            for clave, (apellido, nombre) in sorted(contactos.items()): #sorted es para ordenar los contactos alfabeticamente
+                print(f"{clave}. \t{apellido} \t{nombre}")
             try: 
                 claveCliente = int(input("Ingresa la clave del cliente: "))
                 if claveCliente not in contactos:
                     print("Cliente no encontrado.")
                     continue
                 print("Selecciona la sala para tu reservacion:")
+                print("CLAVE\tNOMBRE\tCUPO")
                 for codigo, (salaNombre, cupo) in salasActivas.items():
-                    print(f"{codigo}. {salaNombre} (Cupo: {cupo})")
+                    print(f"{codigo}. \t{salaNombre} \t(Cupo: {cupo})")
                 
                 codigoSala = input("Ingresa el codigo de la sala: ")
                 if codigoSala not in salasActivas:
@@ -99,24 +96,35 @@ while True:
                     continue
 
                 ocupado = False
-                for _, (c, s, f, h, _) in reservaciones.items():
-                    if s == codigoSala and f == fecha and h == hora:
+                for id_res, (cliente_res, sala_res, fecha_res, turno_res, _) in reservaciones.items():
+                    if sala_res == codigoSala and fecha_res == fecha and turno_res == turno:
                         ocupado = True
                         break
                 if ocupado:
                     print("Ese turno ya está reservado para esta sala en esa fecha.")
                     continue
-                NombreReservacion = input("Como se llama el Evento: ")
-            
+
+                while True: 
+                    NombreReservacion = input("Como se llama el Evento: ").strip()
+                    if not NombreReservacion:
+                        print("El nombre del evento no puede estar vacio.")
+                    else:
+                        break
                 reservacion_id = len(reservaciones) + 1
-                reservaciones[reservacion_id] = (claveCliente, codigoSala, fecha, hora, NombreReservacion )
+                reservaciones[reservacion_id] = (claveCliente, codigoSala, fecha, turno, NombreReservacion )
                 print(f"Id de la reservacion: {reservacion_id}")
-                print("Reservacion registrada exitosamente.")            
+                print("Reservacion registrada exitosamente.")
+                break            
             except ValueError:
                 print("Entrada invalida. Intenta de nuevo.")
                 continue
     
     elif opcion == "4":
+        """Opcion que modifica el nombre de la reservacion"""
+        print("Reservaciones actuales:")
+        print("Id\t\tCliente\t\tSala\t\tFecha\t\tturno\t\tEvento")
+        for reservacion_id, (claveCliente, codigoSala, fecha, turno, NombreReservacion) in reservaciones.items():
+            print(f"{reservacion_id} \t\t{claveCliente} \t{codigoSala} \t{fecha} \t{turno} \t\t{NombreReservacion}")
         FolioACambiar = input("Ingresa el id de la reservacion: ")
         try:
             FolioACambiar = int(FolioACambiar)
@@ -126,15 +134,13 @@ while True:
         if FolioACambiar not in reservaciones:
             print("Reservacion no encontrada")
         else:
-            datos = reservaciones[reservacion_id]
+            claveCliente, codigoSala, fecha, turno, NombreReservacion = reservaciones[FolioACambiar]
             print(f"Nombre actual del evento: {NombreReservacion}")
             nuevo_nombre = input("Ingresa el nuevo nombre del evento: ")
-            NombreReservacion = nuevo_nombre
-            reservaciones[reservacion_id] = (claveCliente, codigoSala, fecha, hora, NombreReservacion)
-            
-            for reservacion_id, (claveCliente, codigoSala, fecha, hora, NombreReservacion) in reservaciones.items():
-                print(f"Id: {reservacion_id}, Cliente: {claveCliente}, Sala: {codigoSala}, Fecha: {fecha}, Hora: {hora}, Evento: {NombreReservacion}")
+            if nuevo_nombre:
+                reservaciones[reservacion_id] = (claveCliente, codigoSala, fecha, turno, nuevo_nombre)               
             print("Nombre del evento actualizado exitosamente.")
+            print(f"{reservacion_id} \t\t{claveCliente} \t{codigoSala} t{fecha} \t{turno} \t\t{nuevo_nombre}")
 
     elif opcion == "5":
         fecha_str = input("Ingresa la fecha para el reporte (YYYY-MM-DD): ")
@@ -174,4 +180,5 @@ while True:
         break
     else:
         print("Opcion no valida, intenta de nuevo")
+
 
