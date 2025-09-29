@@ -8,7 +8,7 @@ reservaciones = dict()
 numeroFolio = 1
 
 while True:
-    print("\n---Menu de opciones---")
+    print("\n \t---Menu---\t")
     print("1. Registrar contacto")
     print("2. Registrar Sala")
     print("3. Registrar reservacion") 
@@ -17,10 +17,12 @@ while True:
     print("6. Salir del menu")
     opcion = input("Elige una opcion (1-6):")
 
+
+
     if opcion == "1":
         """Funcion que registra los datos del cliente"""
         while True:
-            apellido = input("Apellido(s): ")
+            apellido = input("\nApellido(s): ")
             nombre = input("Nombre(s): ") 
             if not (apellido.replace (" ", "").isalpha() and nombre.replace(" ", "").isalpha()):
                 print("Error al agregar cliente, solo se permiten letras. Introduzca nuevamente.")
@@ -29,31 +31,38 @@ while True:
             print("cliente registrado exitosamente.")
             print(f"Clave del cliente: {claveCliente}")
             claveCliente += 1
-            continuar = input("Ingrese [s] para registrar otro cliente, o cualquier otra tecla para finalizar: ").lower()
+            continuar = input("Ingrese [s] para registrar otro cliente, o cualquier otra tecla para finalizar: "
+            "\n").lower()
             if continuar != "s":
                     break
+
+
 
     elif opcion == "2":
         """Opcion que registra los datos del sala"""
         while True:
-            salaNombre = input("Escribe el nombre de la sala: ")
+            salaNombre = input("\nEscribe el nombre de la sala: ")
             cupo = input("Capacidad de la sala (especificar con numeros): ")
             if not (salaNombre.replace (" ", "") and cupo.replace(" ", "").isdigit()):
                 print("Error al agregar sala, el nombre no puede estar vacio y el cupo debe ser numerico.")
                 continue
-            codigoSala = f"S{claveSala:02d}"#d = decimal de enteros, esta linea solo es para darle un formato a la clave
+            codigoSala = f"S{claveSala:02d}"
             salasActivas[codigoSala] = (salaNombre, cupo)
             print("Sala registrada exitosamente.")
             print(f"Clave de la sala: {codigoSala}")
             claveSala += 1
-            continuar = input("Ingrese [s] para registrar otro cliente, o cualquier otra tecla para finalizar: ").lower()
+            continuar = input("Ingrese [s] para registrar otro cliente, o cualquier otra tecla para finalizar: "
+            "\n").lower()
             if continuar != "s":
                     break   
+
+
+
 
     elif opcion == "3":
         """Opcion que registra reservacion"""
         while True: #Aqui agregamos un bucle para que pueda ver las opciones y si pone una incorrecta no se vaya al menu principal
-            print("Seleccion cliente para tu reservacion:")
+            print("\nSeleccion cliente para tu reservacion:")
             print("CLAVE\tNOMBRE\tAPELLIDO")
             for clave, (apellido, nombre) in sorted(contactos.items()): #sorted es para ordenar los contactos alfabeticamente
                 print(f"{clave}. \t{apellido} \t{nombre}")
@@ -61,7 +70,8 @@ while True:
                 claveCliente = int(input("Ingresa la clave del cliente: "))
                 if claveCliente not in contactos:
                     print("Cliente no encontrado.")
-                    respuesta = input("Deseas cancelar la operacion? presiona [s] para si o cualquier otra tecla para no: " ).lower()
+                    respuesta = input("Deseas cancelar la operacion? presiona [s] para si o " \
+                    "cualquier otra tecla para no: " ).lower()
                     if respuesta == "s":
                         break  # Salir al menú principal para registrar un nuevo cliente
                     continue
@@ -124,7 +134,8 @@ while True:
     
     elif opcion == "4":
         """Opcion que modifica el nombre de la reservacion"""
-        print("Reservaciones actuales:")
+
+        print("\nReservaciones actuales:")
         print("Id\t\tCliente\t\tSala\t\tFecha\t\tturno\t\tEvento")
         for reservacion_id, (claveCliente, codigoSala, fecha, turno, NombreReservacion) in reservaciones.items():
             print(f"{reservacion_id} \t\t{claveCliente} \t{codigoSala} \t{fecha} \t{turno} \t\t{NombreReservacion}")
@@ -184,10 +195,9 @@ while True:
         break
     else:
         print("Opcion no valida, intenta de nuevo")
-
-    elif opcion == "6":
         print("Saliendo del menu...")
         break
     else:
         print("Opcion no valida, intenta de nuevo")
+
 
