@@ -195,9 +195,5 @@ while True:
         break
     else:
         print("Opcion no valida, intenta de nuevo")
-        print("Saliendo del menu...")
-        break
-    else:
-        print("Opcion no valida, intenta de nuevo")
 
 
