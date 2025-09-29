@@ -146,40 +146,48 @@ while True:
             print(f"{reservacion_id} \t\t{claveCliente} \t{codigoSala} t{fecha} \t{turno} \t\t{nuevo_nombre}")
 
     elif opcion == "5":
-        fecha_str = input("Ingresa la fecha para el reporte (YYYY-MM-DD): ")
-        try:
-            fecha_reporte = datetime.datetime.strptime(fecha_str, "%Y-%m-%d").date()
-        except ValueError:
-            print("Formato de fecha incorrecto.")
-            continue
+        while True:
+            fecha_str = input("\nIngresa la fecha para el reporte (YYYY-MM-DD): ")
+            try:
+                fecha_reporte = datetime.datetime.strptime(fecha_str, "%Y-%m-%d").date()
+            except ValueError:
+                print("Formato de fecha incorrecto.")
+                continue
 
-        # Filtrar reservaciones por la fecha solicitada
-        reservas_filtradas = [(reservacion_id, claveCliente, codigoSala, fecha, hora, NombreReservacion)
-            for reservacion_id, (claveCliente, codigoSala, fecha, hora, NombreReservacion ) in reservaciones.items()
-                if fecha == fecha_reporte]
+            # Filtrar reservaciones por la fecha solicitada
+            reservas_filtradas = [(reservacion_id, claveCliente, codigoSala, fecha, hora, NombreReservacion)
+                for reservacion_id, (claveCliente, codigoSala, fecha, hora, NombreReservacion ) in reservaciones.items()
+                    if fecha == fecha_reporte]
 
-        if not reservas_filtradas:
-            print("No hay reservaciones para esta fecha.")
-        else:
-            print("*"*95)
-            print("**" "\t\tREPORTE DE RESERVACIONES PARA EL DÍA", fecha_str,  "\t\t**""")
-            print("**SALA\t\tCLIENTE\t\t\tEVENTO\t\t\t\tTURNO**")
-            print("*"*95)
+            if not reservas_filtradas:
+                print("No hay reservaciones para esta fecha.")
+            else:
+                print("*"*95)
+                print("**" "\t\tREPORTE DE RESERVACIONES PARA EL DÍA", fecha_str,  "\t\t**""")
+                print("**SALA\t\tCLIENTE\t\t\tEVENTO\t\t\t\tTURNO**")
+                print("*"*95)
 
-            for reservacion_id, claveCliente, codigoSala, fecha, hora, NombreReservacion in reservas_filtradas:
-                cliente = contactos.get(claveCliente, "Cliente no encontrado.")
-                sala = salasActivas.get(codigoSala, "Sala no encontrada.")
-                evento = f"{NombreReservacion}"  
-                turno = "Matutino" if hora == datetime.time(9, 0) else "Vespertino" if hora == datetime.time(15, 0) else "Nocturno"
+                for reservacion_id, claveCliente, codigoSala, fecha, hora, NombreReservacion in reservas_filtradas:
+                    cliente = contactos.get(claveCliente, "Cliente no encontrado.")
+                    sala = salasActivas.get(codigoSala, "Sala no encontrada.")
+                    evento = f"{NombreReservacion}"  
+                    turno = "Matutino" if hora == datetime.time(9, 0) else "Vespertino" if hora == datetime.time(15, 0) else "Nocturno"
 
-                print(f"{codigoSala}\t\t{cliente[0]} {cliente[1]}\t\t{evento}\t\t\t\t{turno}")
+                    print(f"{codigoSala}\t\t{cliente[0]} {cliente[1]}\t\t{evento}\t\t\t\t{turno}")
 
-            print(("*" * 40) + "FIN DEL REPORTE" + ("*" * 40))
+                print(("*" * 40) + "FIN DEL REPORTE" + ("*" * 40))
 
-            break
+                break
 
     elif opcion == "6":
         print("Saliendo del menu...")
         break
     else:
         print("Opcion no valida, intenta de nuevo")
+
+    elif opcion == "6":
+        print("Saliendo del menu...")
+        break
+    else:
+        print("Opcion no valida, intenta de nuevo")
+
